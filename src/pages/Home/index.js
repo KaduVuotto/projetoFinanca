@@ -10,9 +10,6 @@ export default function Home() {
     return (
         <View>
             <Text> Home </Text>
-            <Text> {user && user.nome} </Text>
-            <Text> {user && user.email} </Text>
-            <Button title='sair' onPress={() => singOut()} />
         </View>
     );
 }
