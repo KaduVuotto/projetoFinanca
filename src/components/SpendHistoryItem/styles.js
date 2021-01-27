@@ -36,10 +36,12 @@ font-size:12;
 color:#c0c0c0;
 `;
 export const SpendValue = styled.Text`
-
+color:${props => props.type === 'Receita' ? '#069ff5' : '#e7090f'};
+font-size:20px;
+font-weight:bold;
 `;
 export const ViewValue = styled.View`
-flex:1;
+flex:3;
 align-items:center;
 justify-content:center;
 `;
