@@ -11,6 +11,7 @@ import { format } from 'date-fns'
 export default function New() {
   const navigation = useNavigation();
   const [valueInput, setValueInput] = useState('');
+  const [valueNameInput, setValueNameInput] = useState('');
   const [typePicker, setTypePicker] = useState('Registro');
   const { user: currentUser } = useContext(AuthContext)
 
@@ -21,6 +22,7 @@ export default function New() {
     let key = await firebase.database().ref('historico').child(uid).push().key;
     await firebase.database().ref('historico').child(uid).child(key).set({
       type: typePicker,
+      name: valueNameInput,
       value: parseFloat(valueInput),
       date: format(new Date(), 'dd/MM/yy')
     })
@@ -38,6 +40,7 @@ export default function New() {
     });
     Keyboard.dismiss();
     setTypePicker('Registro')
+    setValueNameInput('')
     setValueInput('');
     navigation.navigate('Home')
   }
@@ -77,6 +80,13 @@ export default function New() {
           <Picker
             onChange={setTypePicker}
             type={typePicker}
+          />
+          <Input
+            placeholder='Nome do registro'
+            returnKey='next'
+            onSubmitEditing={() => Keyboard.dismiss()}
+            value={valueNameInput}
+            onChangeText={(text) => setValueNameInput(text)}
           />
           <Input
             placeholder='Valor do Registro (em R$)'

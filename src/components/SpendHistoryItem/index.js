@@ -22,7 +22,7 @@ export default function SpendHistoryItem({ item }) {
             </ContentSpend>
             <ViewValue>
                 <SpendValue type={item.type}>
-                    {item.type === 'Receita' ? '+' : '-'} R$ {item.value}
+                    {item.type === 'Receita' ? '+' : '-'} R$ {item.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}
                 </SpendValue>
             </ViewValue>
         </Container>
