@@ -16,7 +16,7 @@ export default function Picker({ onChange, type }) {
                 dropdownIconColor={'white'}
                 selectedValue={type}
                 onValueChange={(value) => onChange(value)} >
-                <RNPickerSelect.Item label='Tipo de Regstro' value={null} />
+                <RNPickerSelect.Item label='Tipo de Registro' value='Registro' />
                 <RNPickerSelect.Item label='Despesa' value='Despesa' />
                 <RNPickerSelect.Item label='Receita' value='Receita' />
             </RNPickerSelect>

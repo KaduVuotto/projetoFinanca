@@ -31,7 +31,7 @@ function AuthProvider({ children }) {
                     .then((snapshot) => {
                         let data = {
                             uid: uid,
-                            nome: snapshot.val().nome,
+                            name: snapshot.val().name,
                             email: value.user.email,
                         }
                         setUser(data);
@@ -44,17 +44,17 @@ function AuthProvider({ children }) {
     }
 
     //cadastro
-    async function singUp(email, password, nome) {
+    async function singUp(email, password, name) {
         await firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(async (value) => {
                 let uid = value.user.uid;
                 await firebase.database().ref('users').child(uid).set({
-                    saldo: 0,
-                    nome: nome,
+                    balance: 0,
+                    name: name,
                 }).then(() => {
                     let data = {
                         uid: uid,
-                        nome: nome,
+                        name: name,
                         email: value.user.email,
                     }
                     setUser(data);

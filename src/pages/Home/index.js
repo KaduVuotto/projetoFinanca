@@ -24,7 +24,7 @@ export default function Home() {
             <Header />
             <Container>
                 <Name>
-                    {user && user.nome.toUpperCase()}
+                    {user && user.name.toUpperCase()}
                 </Name>
                 <BalanceMoney>
                     <ContentBalance>
