@@ -9,7 +9,8 @@ import {
     View,
     Keyboard,
     Platform,
-    Dimensions
+    Dimensions,
+    ActivityIndicator,
 } from 'react-native';
 
 import {
@@ -35,7 +36,7 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function SignIn() {
     const navigation = useNavigation();
-    const { singUp, singIn } = useContext(AuthContext);
+    const { singUp, singIn, loadingAuth } = useContext(AuthContext);
 
     //SingIn
     const [email, setEmail] = useState('')
@@ -105,11 +106,11 @@ export default function SignIn() {
                 </AreaInput>
 
                 <ContainerSubmit>
-                    <LogoSubmit source={require('../../images/PigGeek_Icon.png')} />
-                    <SubmitButton onPress={handleLogin}>
-                        <SubmitText>
-                            ENTRAR
-                    </SubmitText>
+                    <SubmitButton onPress={() => { handleLogin(), Keyboard.dismiss() }}
+                    >
+                        {loadingAuth ?
+                            <ActivityIndicator color='#FFF' size={20} /> :
+                            <SubmitText>ENTRAR</SubmitText>}
                     </SubmitButton>
                 </ContainerSubmit>
 
@@ -120,59 +121,61 @@ export default function SignIn() {
                 }
             </Container>
 
-            { modalVisible ?
-                (<Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => { }}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <TouchableOpacity
-                                style={styles.openButton}
-                                onPress={() => { setModalVisible(!modalVisible); }}>
-                                <Text style={styles.textStyle}>X</Text>
-                            </TouchableOpacity>
+            {
+                modalVisible ?
+                    (<Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => { }}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <TouchableOpacity
+                                    style={styles.openButton}
+                                    onPress={() => { setModalVisible(!modalVisible); }}>
+                                    <Text style={styles.textStyle}>X</Text>
+                                </TouchableOpacity>
 
-                            <AreaInput>
-                                <InputRegister
-                                    placeholder='Digite seu nome'
-                                    autoCorrect={false}
-                                    autoCapitalize='none'
-                                    value={nameRegister}
-                                    onChangeText={(text) => setNameRegister(text)}
-                                />
-                            </AreaInput>
-                            <AreaInput>
-                                <InputRegister
-                                    placeholder='Digite seu e-mail'
-                                    autoCorrect={false}
-                                    autoCapitalize='none'
-                                    value={emailRegister}
-                                    onChangeText={(text) => setEmailRegister(text)}
-                                />
-                            </AreaInput>
-                            <AreaInput>
-                                <InputRegister
-                                    placeholder='Escolha sua senha'
-                                    autoCorrect={false}
-                                    autoCapitalize='none'
-                                    value={passwordRegister}
-                                    onChangeText={(text) => setPasswordRegister(text)}
-                                />
-                            </AreaInput>
+                                <AreaInput>
+                                    <InputRegister
+                                        placeholder='Digite seu nome'
+                                        autoCorrect={false}
+                                        autoCapitalize='none'
+                                        value={nameRegister}
+                                        onChangeText={(text) => setNameRegister(text)}
+                                    />
+                                </AreaInput>
+                                <AreaInput>
+                                    <InputRegister
+                                        placeholder='Digite seu e-mail'
+                                        autoCorrect={false}
+                                        autoCapitalize='none'
+                                        value={emailRegister}
+                                        onChangeText={(text) => setEmailRegister(text)}
+                                    />
+                                </AreaInput>
+                                <AreaInput>
+                                    <InputRegister
+                                        placeholder='Escolha sua senha'
+                                        autoCorrect={false}
+                                        autoCapitalize='none'
+                                        value={passwordRegister}
+                                        onChangeText={(text) => setPasswordRegister(text)}
+                                    />
+                                </AreaInput>
 
-                            <ContainerSubmit>
-                                <LogoSubmit source={require('../../images/PigGeek_Icon.png')} />
-                                <SubmitButtonRegister onPress={handleSingUp}>
-                                    <SubmitTextRegister>CADASTRAR</SubmitTextRegister>
-                                </SubmitButtonRegister>
-                            </ContainerSubmit>
+                                <ContainerSubmit>
+                                    <SubmitButtonRegister onPress={handleSingUp}>
+                                        {loadingAuth ?
+                                            <ActivityIndicator color='#FFF' size={20} /> :
+                                            <SubmitTextRegister>CADASTRAR</SubmitTextRegister>}
+                                    </SubmitButtonRegister>
+                                </ContainerSubmit>
+                            </View>
                         </View>
-                    </View>
-                </Modal>) : null
+                    </Modal>) : null
             }
-        </Background>
+        </Background >
     );
 }
 
