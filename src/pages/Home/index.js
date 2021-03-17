@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, Button } from 'react-native';
-import Header from '../../components/Header'
+import Header from '../../components/Header/index.android'
 import { AuthContext } from '../../contexts/auth';
 import SpendHistoryItem from '../../components/SpendHistoryItem'
 import firebase from '../../services/firebaseConnection';
