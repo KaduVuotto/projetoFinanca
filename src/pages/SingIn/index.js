@@ -102,6 +102,7 @@ export default function SignIn() {
                         autoCapitalize='none'
                         value={password}
                         onChangeText={(text) => setPassword(text)}
+                        secureTextEntry={true}
                     />
                 </AreaInput>
 
@@ -161,6 +162,7 @@ export default function SignIn() {
                                         autoCapitalize='none'
                                         value={passwordRegister}
                                         onChangeText={(text) => setPasswordRegister(text)}
+                                        secureTextEntry={true}
                                     />
                                 </AreaInput>
 
