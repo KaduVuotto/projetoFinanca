@@ -9,7 +9,7 @@ export default function Header() {
     return (
         <Container>
             <ButtonMenu onPress={() => navigation.toggleDrawer()}>
-                <Icon name='ios-menu-sharp' color='#FFF' size={30} />
+                <Icon name='menu-outline' color='#FFF' size={30} />
             </ButtonMenu>
         </Container>
     );
