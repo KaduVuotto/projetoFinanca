@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, Alert } from 'react-native';
 import Header from '../../components/Header/index.android'
 import { AuthContext } from '../../contexts/auth';
 import SpendHistoryItem from '../../components/SpendHistoryItem'
 import firebase from '../../services/firebaseConnection';
-import { format } from 'date-fns';
+import { format, isPast } from 'date-fns';
 import { Background, Container, Name, BalanceMoney, Title, ContentBalance, Money, Balance, List, FooterList } from './styles'
 
 export default function Home() {
@@ -28,7 +28,8 @@ export default function Home() {
                         key: childItem.key,
                         name: childItem.val().name,
                         type: childItem.val().type,
-                        value: childItem.val().value
+                        value: childItem.val().value,
+                        date: childItem.val().date,
                     };
                     setSpendHistory(oldArray => [...oldArray, list].reverse())
                 })
@@ -36,6 +37,36 @@ export default function Home() {
         }
         loadList();
     }, []);
+
+    function handleDelete(item) {
+        if (isPast(new Date(item.date))) {
+            alert('Você não pode excluir um registro antigo!')
+            return;
+        }
+
+        Alert.alert(
+            'Atenção',
+            `Você deseja excluir ${item.name} - Valor: ${item.date}`,
+            [{
+                text: 'Cancelar',
+                style: 'cancel'
+            }, {
+                text: 'Deletar',
+                onPress: () => handleDeleteSuccesss(item)
+            }]
+        )
+    }
+
+    async function handleDeleteSuccesss(item) {
+        await firebase.database().ref('historico').child(uid).child(item.key).remove()
+            .then(async () => {
+                let actualBalance = balanceUser;
+                item.type === 'Despesa' ? actualBalance += parseFloat(item.value) : actualBalance -= parseFloat(item.value);
+
+                await firebase.database().ref('users').child(uid).child('balance').set(actualBalance);
+            })
+            .catch((error) => alert(error));
+    }
 
     return (
         <Background>
@@ -64,7 +95,7 @@ export default function Home() {
                 showsVerticalScrollIndicator={false}
                 data={spendHistory}
                 keyExtractor={item => item.id}
-                renderItem={({ item }) => (<SpendHistoryItem item={item} />)}
+                renderItem={({ item }) => (<SpendHistoryItem item={item} deleteItem={handleDelete} />)}
                 ListHeaderComponent={() => (
                     <View style={{ marginLeft: 36, marginBottom: 16 }}>
                         <Text style={{ fontSize: 16, color: '#c0c0c0' }}>
