@@ -4,7 +4,7 @@ import Header from '../../components/Header/index.android'
 import { AuthContext } from '../../contexts/auth';
 import SpendHistoryItem from '../../components/SpendHistoryItem'
 import firebase from '../../services/firebaseConnection';
-import { format, isPast } from 'date-fns';
+import { format, isBefore } from 'date-fns';
 import { Background, Container, Name, BalanceMoney, Title, ContentBalance, Money, Balance, List, FooterList } from './styles'
 
 export default function Home() {
@@ -20,7 +20,7 @@ export default function Home() {
                 setBalanceUser(snapshot.val().balance)
             });
 
-            await firebase.database().ref('historico').child(uid).orderByChild('date').equalTo(format(new Date, 'dd/MM/yy')).limitToLast(15).on('value', (snapshot) => {
+            await firebase.database().ref('historico').child(uid).orderByChild('date').equalTo(format(new Date, 'dd/MM/yyyy')).limitToLast(15).on('value', (snapshot) => {
                 setSpendHistory([]);
 
                 snapshot.forEach((childItem) => {
@@ -39,7 +39,17 @@ export default function Home() {
     }, []);
 
     function handleDelete(item) {
-        if (isPast(new Date(item.date))) {
+
+        const [dayItem, monthItem, yearItem] = item.date.split('/');
+        const dateItem = new Date(`${yearItem}/${monthItem}/${dayItem}`);
+
+        const formatNewDate = format(new Date(), 'dd/MM/yyy');
+        const [newDateDay, newDateMonth, newDateYear] = formatNewDate.split('/');
+        
+        const formatedDate = new Date(`${newDateYear}/${newDateMonth}/${newDateDay}`);
+
+
+        if (isBefore(dateItem, formatedDate)) {
             alert('Você não pode excluir um registro antigo!')
             return;
         }

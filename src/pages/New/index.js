@@ -24,7 +24,7 @@ export default function New() {
       type: typePicker,
       name: valueNameInput,
       value: parseFloat(valueInput),
-      date: format(new Date(), 'dd/MM/yy')
+      date: format(new Date(), 'dd/MM/yyyy')
     })
 
     //Atualizar o saldo
